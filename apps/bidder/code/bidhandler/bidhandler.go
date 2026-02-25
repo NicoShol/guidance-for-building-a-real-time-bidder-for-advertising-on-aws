@@ -71,6 +71,7 @@ func (h Handler) HandleRequest(ctx *fasthttp.RequestCtx) {
 
 	log.Info().Msg("Received request")
 	response := auction.Response{}
+	// response initialized empty, but will be populated in the "auction.Run" method
 	err := h.auction.Run(deadline, request, &response)
 	log.Info().Msg("Received request")
 	if err != nil {
@@ -80,4 +81,4 @@ func (h Handler) HandleRequest(ctx *fasthttp.RequestCtx) {
 
 	bidResponse := buildResponse(&response, pd)
 	h.writeResponse(bidResponse, ctx)
-}
+}  // <- HTTP response is sent exactly HERE

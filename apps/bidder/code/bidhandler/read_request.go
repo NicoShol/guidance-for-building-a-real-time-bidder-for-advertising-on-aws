@@ -111,6 +111,10 @@ func parseDeviceID(encoded []byte) (id.ID, error) {
 }
 
 // parseBidRequest2 parses a bid request 2.x JSON byte slice into an Request
+// Key ID here: persistent data is shared, so contains data from previous auction.
+// Essentially resetting its value here, with a "trick" of reusing the same byte slice, but truncating it to zero length (very efficient)
+// In case new byte slice exceeds the capacity of the old one, a new allocation will be made, but that's not expected to happen often.
+// (doubling size at each turn --> quickly converges) 
 func parseBidRequest2(byteRequest []byte, pd *persistentData) (*auction.Request, error) {
 	v, err := pd.parser.ParseBytes(byteRequest)
 	if err != nil {

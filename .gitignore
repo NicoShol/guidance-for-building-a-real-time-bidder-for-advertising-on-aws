@@ -2,3 +2,6 @@
 .venv
 cdk.context.json
 .vscode
+
+claude_summaries/*
+CLAUDE.md

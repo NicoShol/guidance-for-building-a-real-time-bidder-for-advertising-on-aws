@@ -28,6 +28,7 @@ func NewServer(
 				return
 			}
 			bidHandler.HandleRequest(ctx)
+			// When handler returns, fasthttp writes ctx to TCP socket (exactly here)
 		case cfg.HealthCheckPath:
 			if !ctx.IsGet() && !ctx.IsHead() {
 				ctx.Error("Unsupported method", fasthttp.StatusMethodNotAllowed)

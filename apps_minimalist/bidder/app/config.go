@@ -1,5 +1,10 @@
 package app
 
+import (
+	"apps_minimalist/bidder/code/server"
+)
+
 type Config struct {
-	LogLevel string `envconfig:"LOG_LEVEL" required:"true"`
+	Server 		server.Config
+	LogLevel 	string `envconfig:"LOG_LEVEL" required:"true"`
 }

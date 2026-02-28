@@ -1,6 +1,8 @@
 package app
 
 import (
+	bidserver "apps_minimalist/bidder/code/server"
+	"os"
 	"runtime"
 	"time"
 
@@ -31,5 +33,16 @@ func App() (errReturn error) {
 		runtime.NumCPU(),
 	)
 
+	server := bidserver.NewServer(cfg.Server)
+
+	// Handle CTR+C 
+	stop := make(chan os.Signal, 1)
+
+	server.AsyncListenAndServe(func(err error) {
+		errReturn = errors.Wrap(err, "error during server operation")
+		stop <- os.Interrupt
+	})
+
+	<-stop
 	return 
 }

@@ -1,7 +1,9 @@
 package server
 
 import (
-	"github.com/rs/zerolog/log"
+	// "github.com/rs/zerolog/log"
+	"apps_minimalist/bidder/code/bidhandler"
+
 	"github.com/valyala/fasthttp"
 	"github.com/valyala/fasthttp/reuseport"
 )
@@ -13,18 +15,19 @@ type Server struct {
 
 func NewServer(
 	cfg Config,
+	bidHandler bidhandler.Handler,
 ) *Server {
 	requestHandler := func(ctx *fasthttp.RequestCtx) {
-		// TESTING HERE : simply log requests
-		log.Info().
-			Str("method", string(ctx.Method())).
-			Str("path", string(ctx.Path())).
-			Msg("recieved request")
-
-		ctx.SetStatusCode(fasthttp.StatusOK)
-		ctx.SetContentType("text/plain")
-		ctx.SetBodyString("Hello from bidder!")
-		// END TESTING
+		switch string(ctx.Path()) {
+		case cfg.BidRequestPath:
+			if !ctx.IsPost() {
+				ctx.Error("Unsupported method", fasthttp.StatusMethodNotAllowed)
+				return
+			} 
+			bidHandler.HandleRequest(ctx)
+		default:
+			ctx.Error("Unsupported path", fasthttp.StatusNotFound)
+		}
 	}
 
 	return &Server{

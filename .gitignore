@@ -5,3 +5,4 @@ cdk.context.json
 
 claude_summaries/*
 CLAUDE.md
+app_minimalist/logs/*

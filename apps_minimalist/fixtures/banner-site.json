@@ -1,0 +1,122 @@
+{
+  "id": "80ce30c53c16e6ede735f123ef6e32361bfc7b22",
+  "at": 1,
+  "cur": [
+    "USD"
+  ],
+  "imp": [
+    {
+      "id": "1",
+      "bidfloor": 0.03,
+      "banner": {
+        "h": 250,
+        "w": 300,
+        "id": "1",
+        "battr": [
+          13,
+          14
+        ],
+        "pos": 1,
+        "mimes": [
+          "image/jpg",
+          "image/gif"
+        ],
+        "topframe": 1,
+        "expdir": [
+          2,
+          4
+        ],
+        "api": [
+          3,
+          5
+        ]
+      }
+    }
+  ],
+  "site": {
+    "id": "102855",
+    "name": "Publisher Site",
+    "domain": "publisher.com",
+    "cat": [
+      "IAB3-1"
+    ],
+    "page": "http://www.publisher.com/awesome-article",
+    "ref": "http://www.google.com/search?q=cool+stuff",
+    "publisher": {
+      "id": "8953",
+      "name": "Publisher A",
+      "cat": [
+        "IAB3-1"
+      ],
+      "domain": "publisher.com"
+    },
+    "content": {
+      "id": "1234",
+      "episode": 1,
+      "title": "Awesome Article",
+      "series": "Tech News",
+      "season": "Season 1",
+      "url": "http://www.publisher.com/awesome-article",
+      "cat": [
+        "IAB1"
+      ],
+      "keywords": "technology,innovation,gadgets",
+      "contentrating": "Everyone",
+      "language": "en",
+      "producer": {
+        "id": "producer123",
+        "name": "Publisher Content Team"
+      }
+    }
+  },
+  "device": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    "geo": {
+      "lat": 40.7128,
+      "lon": -74.0060,
+      "type": 2,
+      "country": "USA",
+      "region": "NY",
+      "metro": "501",
+      "city": "New York",
+      "zip": "10001"
+    },
+    "dnt": 0,
+    "lmt": 0,
+    "ip": "192.168.1.1",
+    "devicetype": 2,
+    "make": "Apple",
+    "model": "Macbook Pro",
+    "os": "OS X",
+    "osv": "10.15.7",
+    "js": 1,
+    "language": "en"
+  },
+  "user": {
+    "id": "55816b39711f9b5acf3b90e313ed29e51665623f",
+    "buyeruid": "buyer-user-id-12345",
+    "yob": 1985,
+    "gender": "M"
+  },
+  "tmax": 120,
+  "bcat": [
+    "IAB7-39",
+    "IAB8-18",
+    "IAB8-5",
+    "IAB9-9"
+  ],
+  "badv": [
+    "competitor.com"
+  ],
+  "source": {
+    "fd": 1,
+    "tid": "transaction-id-12345",
+    "pchain": "tag1:reseller1"
+  },
+  "regs": {
+    "coppa": 0,
+    "ext": {
+      "gdpr": 0
+    }
+  }
+}

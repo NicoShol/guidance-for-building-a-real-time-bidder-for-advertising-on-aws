@@ -1,0 +1,189 @@
+{
+  "id": "1234567893",
+  "at": 2,
+  "tmax": 120,
+  "cur": [
+    "USD"
+  ],
+  "imp": [
+    {
+      "id": "1",
+      "bidfloor": 0.03,
+      "pmp": {
+        "private_auction": 0
+      },
+      "video": {
+        "mimes": [
+          "video/x-flv",
+          "video/mp4",
+          "application/x-shockwave-flash",
+          "application/javascript"
+        ],
+        "minduration": 5,
+        "maxduration": 30,
+        "protocols": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "w": 640,
+        "h": 480,
+        "startdelay": 0,
+        "linearity": 1,
+        "sequence": 1,
+        "battr": [
+          13,
+          14
+        ],
+        "maxextended": 30,
+        "minbitrate": 300,
+        "maxbitrate": 1500,
+        "boxingallowed": 1,
+        "playbackmethod": [
+          1,
+          3
+        ],
+        "delivery": [
+          2
+        ],
+        "pos": 1,
+        "companionad": [
+          {
+            "id": "1234567893-1",
+            "w": 300,
+            "h": 250,
+            "pos": 1,
+            "battr": [
+              13,
+              14
+            ],
+            "expdir": [
+              2,
+              4
+            ]
+          },
+          {
+            "id": "1234567893-2",
+            "w": 728,
+            "h": 90,
+            "pos": 1,
+            "battr": [
+              13,
+              14
+            ]
+          }
+        ],
+        "api": [
+          1,
+          2
+        ],
+        "companiontype": [
+          1,
+          2
+        ]
+      }
+    }
+  ],
+  "site": {
+    "id": "1345135123",
+    "name": "Site ABCD",
+    "domain": "siteabcd.com",
+    "cat": [
+      "IAB2-1",
+      "IAB2-2"
+    ],
+    "page": "http://siteabcd.com/page.htm",
+    "ref": "http://referringsite.com/referringpage.htm",
+    "privacypolicy": 1,
+    "publisher": {
+      "id": "pub12345",
+      "name": "Publisher A",
+      "cat": [
+        "IAB3-1"
+      ],
+      "domain": "publishera.com"
+    },
+    "content": {
+      "id": "1234567",
+      "episode": 23,
+      "title": "Car Show",
+      "series": "All About Cars",
+      "season": "Season 2",
+      "cat": [
+        "IAB2-2"
+      ],
+      "keywords": "keyword a,keyword b,keyword c",
+      "contentrating": "Everyone",
+      "language": "en",
+      "livestream": 0,
+      "len": 1800
+    }
+  },
+  "device": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:1.9.2.16) Gecko/20140420 Firefox/3.6.16",
+    "geo": {
+      "lat": 37.7749,
+      "lon": -122.4194,
+      "type": 2,
+      "country": "USA",
+      "region": "CA",
+      "metro": "807",
+      "city": "San Francisco",
+      "zip": "94102"
+    },
+    "dnt": 0,
+    "lmt": 0,
+    "ip": "64.124.253.1",
+    "devicetype": 2,
+    "make": "Apple",
+    "model": "Macbook",
+    "os": "OS X",
+    "osv": "10.6",
+    "js": 1,
+    "flashver": "10.1"
+  },
+  "user": {
+    "id": "456789876567897654678987656789",
+    "buyeruid": "545678765467876567898765678987654",
+    "yob": 1985,
+    "gender": "M",
+    "data": [
+      {
+        "id": "6",
+        "name": "Data Provider 1",
+        "segment": [
+          {
+            "id": "12341318394918",
+            "name": "auto intenders",
+            "value": "1"
+          },
+          {
+            "id": "1234131839491234",
+            "name": "auto enthusiasts",
+            "value": "1"
+          }
+        ]
+      }
+    ]
+  },
+  "bcat": [
+    "IAB7-39",
+    "IAB8-18",
+    "IAB8-5"
+  ],
+  "badv": [
+    "competitor-cars.com"
+  ],
+  "source": {
+    "fd": 1,
+    "tid": "video-transaction-98765",
+    "pchain": "tag1:reseller1"
+  },
+  "regs": {
+    "coppa": 0,
+    "ext": {
+      "gdpr": 0
+    }
+  }
+}

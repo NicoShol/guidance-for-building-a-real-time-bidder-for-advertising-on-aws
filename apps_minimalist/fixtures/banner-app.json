@@ -1,0 +1,179 @@
+{
+  "id": "mobile-app-bid-request-456789",
+  "at": 1,
+  "tmax": 120,
+  "cur": [
+    "USD"
+  ],
+  "imp": [
+    {
+      "id": "1",
+      "bidfloor": 0.50,
+      "bidfloorcur": "USD",
+      "instl": 0,
+      "banner": {
+        "w": 320,
+        "h": 50,
+        "id": "1",
+        "battr": [
+          1,
+          3,
+          8,
+          9,
+          10,
+          13,
+          14
+        ],
+        "pos": 7,
+        "mimes": [
+          "image/jpg",
+          "image/gif",
+          "image/png"
+        ],
+        "topframe": 0,
+        "expdir": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "api": [
+          3,
+          5
+        ],
+        "format": [
+          {
+            "w": 320,
+            "h": 50
+          },
+          {
+            "w": 300,
+            "h": 250
+          }
+        ]
+      },
+      "displaymanager": "MyAppMediationSDK",
+      "displaymanagerver": "1.2.3",
+      "tagid": "slot-123-main-banner",
+      "secure": 1
+    }
+  ],
+  "app": {
+    "id": "12345",
+    "name": "Awesome Gaming App",
+    "bundle": "com.example.awesomegame",
+    "domain": "awesomegame.com",
+    "storeurl": "https://play.google.com/store/apps/details?id=com.example.awesomegame",
+    "cat": [
+      "IAB9-30"
+    ],
+    "ver": "2.5.1",
+    "privacypolicy": 1,
+    "paid": 0,
+    "publisher": {
+      "id": "pub-mobile-123",
+      "name": "Mobile Game Studio Inc",
+      "cat": [
+        "IAB9-30"
+      ],
+      "domain": "mobilegamestudio.com"
+    },
+    "content": {
+      "id": "game-content-001",
+      "title": "Level 42 - Epic Boss Battle",
+      "cat": [
+        "IAB9-30"
+      ],
+      "keywords": "game,action,adventure,rpg",
+      "contentrating": "Everyone 10+",
+      "language": "en",
+      "livestream": 0
+    },
+    "keywords": "gaming,mobile,action,adventure"
+  },
+  "device": {
+    "ua": "Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.120 Mobile Safari/537.36",
+    "geo": {
+      "lat": 40.7128,
+      "lon": -74.0060,
+      "type": 1,
+      "country": "USA",
+      "region": "NY",
+      "metro": "501",
+      "city": "New York",
+      "zip": "10001"
+    },
+    "dnt": 0,
+    "lmt": 0,
+    "ip": "192.168.1.50",
+    "devicetype": 4,
+    "make": "Google",
+    "model": "Pixel 5",
+    "os": "Android",
+    "osv": "11",
+    "hwv": "Pixel 5",
+    "h": 2340,
+    "w": 1080,
+    "ppi": 432,
+    "pxratio": 2.75,
+    "js": 1,
+    "language": "en",
+    "carrier": "T-Mobile",
+    "mccmnc": "310-260",
+    "connectiontype": 2,
+    "ifa": "38400000-8cf0-11bd-b23e-10b96e40000d"
+  },
+  "user": {
+    "id": "mobile-user-unique-id-789",
+    "buyeruid": "buyer-mobile-user-456",
+    "yob": 1995,
+    "gender": "M",
+    "data": [
+      {
+        "id": "mobile-segment-provider",
+        "name": "Mobile Audience Data Provider",
+        "segment": [
+          {
+            "id": "seg-mobile-gamer",
+            "name": "mobile gamers",
+            "value": "1"
+          },
+          {
+            "id": "seg-tech-early-adopter",
+            "name": "tech early adopters",
+            "value": "1"
+          },
+          {
+            "id": "seg-high-engagement",
+            "name": "high app engagement",
+            "value": "1"
+          }
+        ]
+      }
+    ]
+  },
+  "bcat": [
+    "IAB7-39",
+    "IAB8-5",
+    "IAB8-18",
+    "IAB9-9",
+    "IAB25-3",
+    "IAB26"
+  ],
+  "badv": [
+    "competitor-game.com",
+    "other-game-studio.com"
+  ],
+  "source": {
+    "fd": 1,
+    "tid": "mobile-app-transaction-xyz789",
+    "pchain": "mobile-exchange:reseller-mobile"
+  },
+  "regs": {
+    "coppa": 0,
+    "ext": {
+      "gdpr": 0,
+      "us_privacy": "1---"
+    }
+  }
+}

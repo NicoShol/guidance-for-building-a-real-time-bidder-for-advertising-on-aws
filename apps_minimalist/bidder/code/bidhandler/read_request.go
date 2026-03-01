@@ -14,16 +14,20 @@ var errBadVersion = errors.New("unsupported x-openrtb-version")
 func (h Handler) readRequest(
 	ctx *fasthttp.RequestCtx,
 	pd *persistentData,
-) ([]byte, *auction.Request) {
+) ([]byte, *auction.ExtendedRequest) {
 		byteRequest := ctx.PostBody()
 		openRTBVersion := openrtb.Version(ctx.Request.Header.Peek("x-openrtb-version"))
 		
 		if openRTBVersion == "" {
 			openRTBVersion = h.cfg.OpenRTBVersion
 		}
+
+		var err error
+		var request *auction.ExtendedRequest
+
 		switch openRTBVersion {
 		case openrtb.OpenRTB2_5:
-			request, err := parseBidRequest2(byteRequest, pd)
+			request, err = parseBidRequestExtended_2_5(byteRequest, pd)
 		default:
 			err = errBadVersion
 		}
@@ -36,13 +40,13 @@ func (h Handler) readRequest(
 		return byteRequest, request
 }
 
-func parseBidRequest2(byteRequest []byte, pd *persistentData) (*auction.Request, error) {
-	v, err := pd.parser.ParseBytes(byteRequest)
-	if err != nil {
-		return nil, errors.Wrap(err, "error while parsing request")
-	}
+// func parseBidRequest2(byteRequest []byte, pd *persistentData) (*auction.Request, error) {
+// 	v, err := pd.parser.ParseBytes(byteRequest)
+// 	if err != nil {
+// 		return nil, errors.Wrap(err, "error while parsing request")
+// 	}
 
-	ID := v.GetStringBytes("id")
+// 	ID := v.GetStringBytes("id")
 
-	// TODO : continue
-}
+// 	// TODO : continue
+// }

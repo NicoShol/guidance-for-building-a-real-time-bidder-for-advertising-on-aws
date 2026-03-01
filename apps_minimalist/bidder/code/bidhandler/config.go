@@ -1,7 +1,7 @@
 package bidhandler
 
 import (
-	"bidder/code/openrtb"
+	"apps_minimalist/bidder/code/openrtb"
 )
 
 // TODO: add some type like for instance openrtb.Version

@@ -31,6 +31,14 @@ func (h Handler) HandleRequest(ctx *fasthttp.RequestCtx) {
 		if request == nil {
 			return
 		}
+		// TESTING -- just log the byte request for now
+		log.Info().Bytes("request", byteRequest).Msg("Parsed request")
+		// END TESTING
+
+		// log.Info().Msg("Parsed request")
+		// response := auction.Response{}
+
+
 		// // TESTING HERE : simply log requests
 		// log.Info().
 		// 	Str("method", string(ctx.Method())).

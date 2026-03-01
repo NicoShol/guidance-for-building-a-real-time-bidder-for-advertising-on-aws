@@ -18,7 +18,7 @@ type persistentData struct {
 	parser 			*fastjson.Parser
 	ksuidSequence 	*ksuid.Sequence
 
-	auctionRequest 	auction.Request
+	auctionRequest 	auction.ExtendedRequest
 	byteResponse 	[]byte
 }
 
@@ -30,6 +30,7 @@ func (pp *pool) Get() *persistentData {
 		log.Trace().Msg("allocating bidhandler persistent data")
 		return newPersistenData()
 	}
+	return v.(*persistentData)
 }
 
 func (pp *pool) Put(p *persistentData) {

@@ -1,6 +1,7 @@
 package app
 
 import (
+	"apps_minimalist/bidder/code/auction"
 	"apps_minimalist/bidder/code/bidhandler"
 	bidserver "apps_minimalist/bidder/code/server"
 	"os"
@@ -34,7 +35,8 @@ func App() (errReturn error) {
 		runtime.NumCPU(),
 	)
 
-	bidHandler := bidhandler.New(cfg.BidHandlerCfg)
+	auctionFn := auction.New()
+	bidHandler := bidhandler.New(cfg.BidHandlerCfg, auctionFn)
 	server := bidserver.NewServer(cfg.Server, bidHandler)
 
 	// Handle CTR+C 

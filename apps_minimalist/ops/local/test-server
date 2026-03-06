@@ -1,0 +1,19 @@
+#!/bin/bash
+# Run this on local machine - on apps_linimalist/ directory
+
+# Exit on error
+set -e
+
+. ./ops/local/test-env
+
+echo "Building server..."
+go build -o ./main .
+
+echo "Starting test server with environment:"
+echo "  SERVER_ADDRESS=$SERVER_ADDRESS"
+echo "  SERVER_BIDREQUEST_PATH=$SERVER_BIDREQUEST_PATH"
+echo "  BIDREQUEST_TIMEOUT=$BIDREQUEST_TIMEOUT"
+echo "  LOG_LEVEL=$LOG_LEVEL"
+echo ""
+
+./main

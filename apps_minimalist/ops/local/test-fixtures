@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -e
+
+. ./ops/local/test-env
+
+# Default server URL (can be overridden with SERVER_URL env var)
+FIXTURE_NAME=$1
+if [ -z "$FIXTURE_NAME" ]; then
+  echo "Usage: $0 <fixture-name>"
+  echo "Example: $0 valid-bidrequest"
+  echo "Please provide the name of the fixture (without .json extension) as an argument:"
+  for file in ./fixtures/*.json; do
+    echo "  - $(basename "$file" .json)"
+  done
+  exit 1
+fi
+
+FIXTURE_PATH="./fixtures/$FIXTURE_NAME.json"
+
+echo "========================================="
+echo "Testing: $FIXTURE_NAME Request"
+echo "========================================="
+echo "Server: $SERVER_BIDREQUEST_PATH"
+echo "Fixture: $FIXTURE_PATH"
+echo ""
+
+curl -X POST "$SERVER_BIDREQUEST_URL" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d @"$FIXTURE_PATH" \
+  -w "\n\nHTTP Status: %{http_code}\nTime: %{time_total}s\n" \
+  -v
+
+echo ""
+echo "========================================="

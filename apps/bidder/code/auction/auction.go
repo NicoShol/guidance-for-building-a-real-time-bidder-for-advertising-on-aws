@@ -63,8 +63,10 @@ func (a *Auction) run(
 	pd *persistentData,
 ) error {
 	if zerolog.GlobalLevel() == zerolog.TraceLevel {
-		// IDs escape on heap even if log level is higher than trace.
-		// That's why the log is wrapped in a 'if' statement.
+		// -- Trick here to avoid unnecessary heap allocations when log level is higher than Trace --
+		// string conversion from []byte causes a heap allocation because strings are immutable and need their own heap memory
+		// By wrapping the entire log statement in an if check, the arguments are only evaluated when the log level is actually Trace
+		// , avoiding unnecessary allocations at higher log levels.
 		log.Trace().Msgf("received bidrequest with ID %s item %s", request.ID, request.Item[0].ID)
 	}
 

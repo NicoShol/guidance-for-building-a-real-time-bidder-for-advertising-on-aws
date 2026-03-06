@@ -33,45 +33,21 @@ func (h Handler) HandleRequest(ctx *fasthttp.RequestCtx) {
 		pd := h.pool.Get()
 		defer h.pool.Put(pd)
 
-		byteRequest, request := h.readRequest(ctx, pd)
+		// byteRequest, request := h.readRequest(ctx, pd)  // byteRequest will be snet to datastream ? 
+		_, request := h.readRequest(ctx, pd)
 		if request == nil {
 			return
 		}
 
 		response := auction.Response{}
 		err := h.auction.Run(deadline, request, &response)
-		// TMP error handling, to be replaced with proper response writing in case of error
+
+		log.Info().Msg("Received request")
 		if err != nil {
-			log.Error().Err(err).Msg("Error while running auction")
-			ctx.Error(err.Error(), fasthttp.StatusInternalServerError)
+			h.writeResponseError(err, ctx)
 			return
 		}
-		// TODO: handle error and set response in context 
-		// for instance: 
-		// log.Info().Msg("Received request")
-		// if err != nil {
-		// 	h.writeResponseError(err, ctx)
-		// 	return
-		// }
 
-		// bidResponse := buildResponse(&response, pd)
-		// h.writeResponse(bidResponse, ctx)
-		// TESTING -- just log the byte request for now
-		log.Info().Bytes("request", byteRequest).Msg("Parsed request")
-		// END TESTING
-
-		// log.Info().Msg("Parsed request")
-		// response := auction.Response{}
-
-
-		// // TESTING HERE : simply log requests
-		// log.Info().
-		// 	Str("method", string(ctx.Method())).
-		// 	Str("path", string(ctx.Path())).
-		// 	Msg("recieved request")
-
-		// ctx.SetStatusCode(fasthttp.StatusOK)
-		// ctx.SetContentType("text/plain")
-		// ctx.SetBodyString("Hello from bidder!")
-		// // END TESTING
-}
+		bidResponse := buildResponse(&response, pd)
+		h.writeResponse(bidResponse, ctx)
+	}

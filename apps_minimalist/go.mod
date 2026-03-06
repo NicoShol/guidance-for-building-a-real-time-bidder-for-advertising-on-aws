@@ -1,6 +1,6 @@
 module apps_minimalist
 
-go 1.24.4
+go 1.25.5
 
 require (
 	emperror.dev/errors v0.8.1
@@ -10,6 +10,7 @@ require (
 	github.com/stretchr/testify v1.3.0
 	github.com/valyala/fasthttp v1.69.0
 	github.com/valyala/fastjson v1.6.10
+	gvisor.dev/gvisor v0.0.0-20260305225805-8e713b88a0f3
 )
 
 require (

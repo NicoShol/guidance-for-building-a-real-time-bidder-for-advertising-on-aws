@@ -1,0 +1,9 @@
+#!/bin/bash
+
+docker run -d \
+	--name prebid-server \
+	--add-host=host.docker.internal:host-gateway \
+	-p 8000:8000 \
+	-v "$(pwd)/prebid-config":/etc/config \
+	-e PBS_CONFIG=/etc/config/pbs.yaml \
+	prebid/prebid-server:v3.30.0

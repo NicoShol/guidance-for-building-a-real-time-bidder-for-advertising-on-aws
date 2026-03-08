@@ -43,12 +43,11 @@ func buildResponse2(r *auction.Response, pd *persistentData) []byte {
 	pd.byteResponse = append(pd.byteResponse, `,"burl":"`...)  
 	pd.byteResponse = append(pd.byteResponse, `https://this.is.test.burl.com/`...)
 	escapedRID := url.PathEscape(requestID)
-	// escapedCID := url.PathEscape(r.Campaign.HexID)
-	escapedCID := "testcampaignid"
+	escapedCID := url.PathEscape(r.Campaign.ID)
 	pd.byteResponse = append(pd.byteResponse, escapedRID...)
 	pd.byteResponse = append(pd.byteResponse, "/"...)
 	pd.byteResponse = append(pd.byteResponse, escapedCID...)
-	pd.byteResponse = append(pd.byteResponse, `/${OPENRTB_PRICE}",`...)
+	pd.byteResponse = append(pd.byteResponse, `/${OPENRTB_PRICE}"`...)
 	// pd.byteResponse = append(pd.byteResponse, ``...)  
 
 	pd.byteResponse = append(pd.byteResponse, `}]}]}`...)

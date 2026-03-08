@@ -1,0 +1,26 @@
+host_cookie:
+  family: prebid
+  cookie_name: uids
+  opt_out_url: ""
+  opt_in_url: ""
+  ttl_days: 90
+
+auction:
+  timeout_ms: 1000
+  price_granularity:
+    precision: 2
+    ranges: 
+    - min: 0
+      max: 20
+      increment: 0.1
+
+gdpr:
+  enabled: true
+  default_value: 0
+
+adapters:
+  # generic: --> custom bidder
+  appnexus: # for testing for now
+    endpoint: "http://host.docker.internal:6000/bidrequest"
+    extra_infos: "{}"
+

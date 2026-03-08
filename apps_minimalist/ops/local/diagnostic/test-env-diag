@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+export DIAGNOSTIC_SERVER_ADDRESS="localhost:8091"
+export DIAGNOSTIC_SERVER_PROFILER_PATH="/debug/pprof"
+export DIAGNOSTIC_SERVER_TRACE_PATH="/debug/pprof/trace"
+export DIAGNOSTIC_SERVER_SHUTDOWN_TIMEOUT="5s"

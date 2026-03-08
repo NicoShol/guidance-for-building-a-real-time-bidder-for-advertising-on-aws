@@ -7,3 +7,7 @@ export BIDREQUEST_TIMEOUT=100ms
 export BIDREQUEST_TIMEOUT_STATUS=504
 export BIDREQUEST_OPEN_RTB_VERSION=2.5
 export LOG_LEVEL=DEBUG
+
+# Diagnostic server configuration
+current_dir=$(dirname "${BASH_SOURCE[0]}")
+. "$current_dir/diagnostic/test-env-diag"

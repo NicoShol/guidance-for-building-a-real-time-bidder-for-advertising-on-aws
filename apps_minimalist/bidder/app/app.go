@@ -3,8 +3,10 @@ package app
 import (
 	"apps_minimalist/bidder/code/auction"
 	"apps_minimalist/bidder/code/bidhandler"
+	diagnosticServer "apps_minimalist/bidder/code/diagnostic_server"
 	bidserver "apps_minimalist/bidder/code/server"
 	"os"
+	"os/signal"
 	"runtime"
 	"time"
 
@@ -38,6 +40,7 @@ func App() (errReturn error) {
 	auctionFn := auction.New()
 	bidHandler := bidhandler.New(cfg.BidHandlerCfg, auctionFn)
 	server := bidserver.NewServer(cfg.Server, bidHandler)
+	diagServer := diagnosticServer.New(cfg.DiagnosticServer)
 
 	// Handle CTR+C 
 	stop := make(chan os.Signal, 1)
@@ -47,6 +50,21 @@ func App() (errReturn error) {
 		stop <- os.Interrupt
 	})
 
+	diagServer.AsyncListenAndServe(func(err error) {
+		errReturn = errors.Wrap(err, "error during diagnostic server operation")
+		stop <- os.Interrupt
+	})
+
+	log.Info().Msg("bidder ready")
+	signal.Notify(stop, os.Interrupt)
 	<-stop
-	return 
+
+	err = shutdown(cfg, server, diagServer)
+	if err != nil {
+		if errReturn == nil {
+			return err
+		}
+	}
+
+	return
 }

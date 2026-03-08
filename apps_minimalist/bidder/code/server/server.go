@@ -59,3 +59,8 @@ func (s *Server) AsyncListenAndServe(errCallback func(error)) {
 		}
 	} ()
 }
+
+// Shutdown shutdowns the server.
+func (s *Server) Shutdown() error {
+	return s.server.Shutdown()
+}

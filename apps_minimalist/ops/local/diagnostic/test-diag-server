@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# Heap memory usage (allocations)
+curl -o heap.prof "http://localhost:8091/debug/pprof/heap"
+go tool pprof -http=:8080 heap.prof
+
+# # Current goroutines and their stacks
+# curl -o goroutine.prof "http://localhost:8091/debug/pprof/goroutine"
+# go tool pprof -http=:8080 goroutine.prof
+
+# # Allocation profile (all allocations, not just heap)
+# curl -o allocs.prof "http://localhost:8091/debug/pprof/allocs"
+# go tool pprof -http=:8080 allocs.prof
+
+# # Mutex contention (where goroutines are blocking on locks)
+# curl -o mutex.prof "http://localhost:8091/debug/pprof/mutex"
+# go tool pprof -http=:8080 mutex.prof

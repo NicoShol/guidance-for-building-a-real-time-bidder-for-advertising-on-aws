@@ -1,0 +1,8 @@
+# Ignore all test output files
+*
+
+# But keep this .gitignore
+!.gitignore
+
+# And optionally keep a README
+!README.md

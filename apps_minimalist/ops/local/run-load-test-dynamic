@@ -1,0 +1,203 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Load environment configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$SCRIPT_DIR/test-env"
+
+# Load test configuration
+RATE="${LOAD_TEST_RATE:-100}"
+DURATION="${LOAD_TEST_DURATION:-30s}"
+WORKERS="${LOAD_TEST_WORKERS:-4}"
+TIMEOUT="${LOAD_TEST_TIMEOUT:-1s}"
+FIXTURE="${LOAD_TEST_FIXTURE:-banner-site}"
+
+# Output directory setup
+OUTPUT_DIR="$SCRIPT_DIR/testing_output"
+mkdir -p "$OUTPUT_DIR"
+
+# Generate timestamp for unique filenames
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+RESULTS_FILE="$OUTPUT_DIR/vegeta-results-dynamic-${TIMESTAMP}.bin"
+PLOT_FILE="$OUTPUT_DIR/plot-dynamic-${TIMESTAMP}.html"
+JSON_FILE="$OUTPUT_DIR/report-dynamic-${TIMESTAMP}.json"
+
+# Check if vegeta is installed
+if ! command -v vegeta &> /dev/null; then
+    echo "Error: vegeta is not installed"
+    echo "Install it with: brew install vegeta (macOS) or go install github.com/tsenart/vegeta@latest"
+    exit 1
+fi
+
+FIXTURE_PATH="$SCRIPT_DIR/../../fixtures/$FIXTURE.json"
+if [ ! -f "$FIXTURE_PATH" ]; then
+    echo "Error: Fixture not found: $FIXTURE_PATH"
+    exit 1
+fi
+
+echo "========================================="
+echo "Dynamic Load Test Configuration"
+echo "========================================="
+echo "Server:   $SERVER_BIDREQUEST_URL"
+echo "Fixture:  $FIXTURE (with dynamic IDs)"
+echo "Rate:     $RATE req/s"
+echo "Duration: $DURATION"
+echo "Workers:  $WORKERS"
+echo "Timeout:  $TIMEOUT"
+echo "Output:   $OUTPUT_DIR"
+echo "========================================="
+echo ""
+
+# Create a Go program to generate dynamic requests
+GENERATOR_DIR=$(mktemp -d)
+trap "rm -rf $GENERATOR_DIR" EXIT
+
+cat > "$GENERATOR_DIR/main.go" <<'GOEOF'
+package main
+
+import (
+	"bufio"
+	"encoding/json"
+	"fmt"
+	"math/rand"
+	"os"
+	"time"
+)
+
+func generateUUID() string {
+	return fmt.Sprintf("%08x-%04x-%04x-%04x-%012x",
+		rand.Uint32(),
+		rand.Uint32()&0xffff,
+		(rand.Uint32()&0x0fff)|0x4000,
+		(rand.Uint32()&0x3fff)|0x8000,
+		rand.Uint64()&0xffffffffffff)
+}
+
+func main() {
+	rand.Seed(time.Now().UnixNano())
+
+	// Read fixture template
+	fixtureData, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading fixture: %v\n", err)
+		os.Exit(1)
+	}
+
+	var fixture map[string]interface{}
+	if err := json.Unmarshal(fixtureData, &fixture); err != nil {
+		fmt.Fprintf(os.Stderr, "Error parsing fixture: %v\n", err)
+		os.Exit(1)
+	}
+
+	writer := bufio.NewWriter(os.Stdout)
+	defer writer.Flush()
+
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		// For each target line from vegeta, generate a unique request
+		line := scanner.Text()
+
+		// Update dynamic fields
+		fixture["id"] = generateUUID()
+
+		if user, ok := fixture["user"].(map[string]interface{}); ok {
+			user["id"] = generateUUID()
+			user["buyeruid"] = generateUUID()
+		}
+
+		if source, ok := fixture["source"].(map[string]interface{}); ok {
+			source["tid"] = generateUUID()
+		}
+
+		if imps, ok := fixture["imp"].([]interface{}); ok {
+			for _, imp := range imps {
+				if impMap, ok := imp.(map[string]interface{}); ok {
+					impMap["id"] = generateUUID()
+				}
+			}
+		}
+
+		// Marshal back to JSON
+		body, err := json.Marshal(fixture)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error marshaling JSON: %v\n", err)
+			continue
+		}
+
+		// Output in vegeta format
+		fmt.Fprintf(writer, "%s\n", line)
+		fmt.Fprintf(writer, "%s\n\n", string(body))
+	}
+}
+GOEOF
+
+# Build the generator
+cd "$GENERATOR_DIR"
+if ! go mod init generator > /dev/null 2>&1; then
+    echo "Error: Failed to initialize Go module"
+    exit 1
+fi
+
+if ! go build -o generator main.go > /dev/null 2>&1; then
+    echo "Error: Failed to build request generator"
+    exit 1
+fi
+
+# Create base targets
+TARGETS_FILE=$(mktemp)
+trap "rm -f $TARGETS_FILE $GENERATOR_DIR/generator" EXIT
+
+cat > "$TARGETS_FILE" <<EOF
+POST $SERVER_BIDREQUEST_URL
+Content-Type: application/json
+EOF
+
+echo "Starting dynamic load test..."
+echo ""
+
+# Run vegeta with dynamic body generation
+cat "$TARGETS_FILE" | \
+    "$GENERATOR_DIR/generator" "$FIXTURE_PATH" | \
+    vegeta attack \
+        -rate="$RATE" \
+        -duration="$DURATION" \
+        -workers="$WORKERS" \
+        -timeout="$TIMEOUT" \
+        -format=http \
+    | tee "$RESULTS_FILE" \
+    | vegeta report -type=text
+
+echo ""
+echo "========================================="
+echo "Additional Statistics"
+echo "========================================="
+
+echo ""
+echo "Latency Histogram:"
+vegeta report -type=hist[0,10ms,20ms,50ms,100ms,200ms,500ms,1s] < "$RESULTS_FILE"
+
+echo ""
+echo "Detailed metrics (JSON):"
+vegeta report -type=json < "$RESULTS_FILE" | tee "$JSON_FILE" | jq '{
+  latencies: .latencies,
+  success_rate: .success,
+  status_codes: .status_codes,
+  errors: .errors
+}'
+
+# Generate HTML plot
+echo ""
+echo "Generating HTML plot..."
+vegeta plot "$RESULTS_FILE" > "$PLOT_FILE"
+
+echo ""
+echo "========================================="
+echo "Test Results Saved"
+echo "========================================="
+echo "Binary results: $RESULTS_FILE"
+echo "JSON report:    $JSON_FILE"
+echo "HTML plot:      $PLOT_FILE"
+echo ""
+echo "To view plot:   open $PLOT_FILE"
+echo "========================================="

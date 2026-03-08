@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Load environment configuration
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+. "$SCRIPT_DIR/test-env"
+
+# Load test configuration (can be overridden via environment variables)
+RATE="${LOAD_TEST_RATE:-100}"           # requests per second
+DURATION="${LOAD_TEST_DURATION:-30s}"   # test duration
+WORKERS="${LOAD_TEST_WORKERS:-4}"       # number of workers
+TIMEOUT="${LOAD_TEST_TIMEOUT:-1s}"      # request timeout
+FIXTURE="${LOAD_TEST_FIXTURE:-banner-site}"  # which fixture to use
+
+# Output directory setup
+OUTPUT_DIR="$SCRIPT_DIR/testing_output"
+mkdir -p "$OUTPUT_DIR"
+
+# Generate timestamp for unique filenames
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+RESULTS_FILE="$OUTPUT_DIR/vegeta-results-${TIMESTAMP}.bin"
+PLOT_FILE="$OUTPUT_DIR/plot-${TIMESTAMP}.html"
+JSON_FILE="$OUTPUT_DIR/report-${TIMESTAMP}.json"
+
+# Check if vegeta is installed
+if ! command -v vegeta &> /dev/null; then
+    echo "Error: vegeta is not installed"
+    echo "Install it with: brew install vegeta (macOS) or go install github.com/tsenart/vegeta@latest"
+    exit 1
+fi
+
+# Check if server is running
+if ! curl -s -o /dev/null -w "%{http_code}" "$SERVER_BIDREQUEST_URL" --max-time 1 > /dev/null 2>&1; then
+    echo "Warning: Server at $SERVER_BIDREQUEST_URL may not be running"
+    echo "Start it with: ./ops/local/test-server"
+    echo ""
+fi
+
+FIXTURE_PATH="$SCRIPT_DIR/../../fixtures/$FIXTURE.json"
+if [ ! -f "$FIXTURE_PATH" ]; then
+    echo "Error: Fixture not found: $FIXTURE_PATH"
+    echo "Available fixtures:"
+    for file in "$SCRIPT_DIR/../../fixtures"/*.json; do
+        echo "  - $(basename "$file" .json)"
+    done
+    exit 1
+fi
+
+echo "========================================="
+echo "Load Test Configuration"
+echo "========================================="
+echo "Server:   $SERVER_BIDREQUEST_URL"
+echo "Fixture:  $FIXTURE"
+echo "Rate:     $RATE req/s"
+echo "Duration: $DURATION"
+echo "Workers:  $WORKERS"
+echo "Timeout:  $TIMEOUT"
+echo "Output:   $OUTPUT_DIR"
+echo "========================================="
+echo ""
+
+# Create temporary file for targets
+TARGETS_FILE=$(mktemp)
+trap "rm -f $TARGETS_FILE" EXIT
+
+# Generate vegeta targets file
+cat > "$TARGETS_FILE" <<EOF
+POST $SERVER_BIDREQUEST_URL
+Content-Type: application/json
+@$FIXTURE_PATH
+
+EOF
+
+echo "Starting load test..."
+echo ""
+
+# Run vegeta attack and generate report
+vegeta attack \
+    -rate="$RATE" \
+    -duration="$DURATION" \
+    -workers="$WORKERS" \
+    -timeout="$TIMEOUT" \
+    -targets="$TARGETS_FILE" \
+    | tee "$RESULTS_FILE" \
+    | vegeta report -type=text
+
+echo ""
+echo "========================================="
+echo "Additional Statistics"
+echo "========================================="
+
+# Generate histogram
+echo ""
+echo "Latency Histogram:"
+vegeta report -type=hist[0,10ms,20ms,50ms,100ms,200ms,500ms,1s] < "$RESULTS_FILE"
+
+# Generate JSON report for detailed analysis
+echo ""
+echo "Detailed metrics (JSON):"
+vegeta report -type=json < "$RESULTS_FILE" | tee "$JSON_FILE" | jq '{
+  latencies: .latencies,
+  success_rate: .success,
+  status_codes: .status_codes,
+  errors: .errors
+}'
+
+# Generate HTML plot
+echo ""
+echo "Generating HTML plot..."
+vegeta plot "$RESULTS_FILE" > "$PLOT_FILE"
+
+echo ""
+echo "========================================="
+echo "Test Results Saved"
+echo "========================================="
+echo "Binary results: $RESULTS_FILE"
+echo "JSON report:    $JSON_FILE"
+echo "HTML plot:      $PLOT_FILE"
+echo ""
+echo "To view plot:   open $PLOT_FILE"
+echo "========================================="

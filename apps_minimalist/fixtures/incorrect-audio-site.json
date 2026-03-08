@@ -1,0 +1,183 @@
+{
+    "at": 1,
+    "tmax": 120,
+    "cur": [
+        "USD"
+    ],
+    "imp": [
+        {
+            "id": "1",
+            "bidfloor": 0.50,
+            "bidfloorcur": "USD",
+            "audio": {
+                "mimes": [
+                    "audio/mp4",
+                    "audio/mpeg",
+                    "audio/aac"
+                ],
+                "minduration": 15,
+                "maxduration": 30,
+                "protocols": [
+                    9,
+                    10
+                ],
+                "startdelay": 0,
+                "sequence": 1,
+                "battr": [
+                    13,
+                    14
+                ],
+                "maxextended": 30,
+                "minbitrate": 128,
+                "maxbitrate": 320,
+                "delivery": [
+                    2
+                ],
+                "companionad": [
+                    {
+                        "id": "audio-companion-1",
+                        "w": 300,
+                        "h": 250,
+                        "pos": 1,
+                        "battr": [
+                            13,
+                            14
+                        ]
+                    },
+                    {
+                        "id": "audio-companion-2",
+                        "w": 728,
+                        "h": 90,
+                        "pos": 1,
+                        "battr": [
+                            13,
+                            14
+                        ]
+                    }
+                ],
+                "api": [
+                    1,
+                    2
+                ],
+                "companiontype": [
+                    1,
+                    2
+                ],
+                "maxseq": 1,
+                "feed": 1,
+                "stitched": 1,
+                "nvol": 2
+            }
+        }
+    ],
+    "site": {
+        "id": "podcast-site-123",
+        "name": "Podcast Network",
+        "domain": "podcastnetwork.com",
+        "cat": [
+            "IAB1-1",
+            "IAB2-3"
+        ],
+        "page": "http://www.podcastnetwork.com/episodes/tech-talk-episode-42",
+        "ref": "http://www.google.com/search?q=tech+podcasts",
+        "privacypolicy": 1,
+        "publisher": {
+            "id": "pub-podcast-789",
+            "name": "Podcast Publisher Inc",
+            "cat": [
+                "IAB1-1"
+            ],
+            "domain": "podcastnetwork.com"
+        },
+        "content": {
+            "id": "episode-42-tech-talk",
+            "episode": 42,
+            "title": "The Future of AI in Healthcare",
+            "series": "Tech Talk Daily",
+            "season": "Season 3",
+            "artist": "John Doe",
+            "genre": "Technology",
+            "album": "Tech Talk Season 3",
+            "cat": [
+                "IAB19-6"
+            ],
+            "keywords": "AI,healthcare,technology,innovation",
+            "contentrating": "Everyone",
+            "language": "en",
+            "livestream": 0,
+            "len": 1800,
+            "producer": {
+                "id": "producer-456",
+                "name": "Podcast Production Team"
+            }
+        }
+    },
+    "device": {
+        "ua": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Mobile/15E148 Safari/604.1",
+        "geo": {
+            "lat": 34.0522,
+            "lon": -118.2437,
+            "type": 1,
+            "country": "USA",
+            "region": "CA",
+            "metro": "803",
+            "city": "Los Angeles",
+            "zip": "90001"
+        },
+        "dnt": 0,
+        "lmt": 0,
+        "ip": "192.168.1.100",
+        "devicetype": 4,
+        "make": "Apple",
+        "model": "iPhone",
+        "os": "iOS",
+        "osv": "14.6",
+        "js": 1,
+        "language": "en",
+        "carrier": "Verizon",
+        "connectiontype": 2
+    },
+    "user": {
+        "id": "podcast-listener-12345",
+        "buyeruid": "buyer-podcast-user-67890",
+        "yob": 1990,
+        "gender": "F",
+        "data": [
+            {
+                "id": "audio-segment-provider",
+                "name": "Audio Data Provider",
+                "segment": [
+                    {
+                        "id": "seg-tech-enthusiast",
+                        "name": "technology enthusiasts",
+                        "value": "1"
+                    },
+                    {
+                        "id": "seg-podcast-listener",
+                        "name": "frequent podcast listeners",
+                        "value": "1"
+                    }
+                ]
+            }
+        ]
+    },
+    "bcat": [
+        "IAB7-39",
+        "IAB8-18",
+        "IAB25-3"
+    ],
+    "badv": [
+        "competitor-podcast.com"
+    ],
+    "source": {
+        "fd": 1,
+        "tid": "audio-transaction-abc123",
+        "pchain": "audio-tag1:audio-reseller1"
+    },
+    "regs": {
+        "coppa": 0,
+        "ext": {
+            "gdpr": 0
+        }
+    }
+}

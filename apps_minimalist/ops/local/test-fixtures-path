@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -e
+
+. ./ops/local/test-env
+
+FIXTURE_PATH=$1
+if [ -z "$FIXTURE_PATH" ]; then
+	echo "Please provide a path"
+	exit 1
+fi
+
+echo "========================================="
+echo "Testing: $FIXTURE_NAME Request"
+echo "========================================="
+echo "Server: $SERVER_BIDREQUEST_PATH"
+echo "Fixture: $FIXTURE_PATH"
+echo ""
+
+curl -X POST "$SERVER_BIDREQUEST_URL" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d @"$FIXTURE_PATH" \
+  -w "\n\nHTTP Status: %{http_code}\nTime: %{time_total}s\n" \
+  -v
+
+echo ""
+echo "========================================="

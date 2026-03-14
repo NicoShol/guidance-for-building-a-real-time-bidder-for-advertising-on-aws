@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+number_occ=$1
+
+for i in $(seq 1 $number_occ); do
+	echo "Running attempt $i ..."
+	shuf -n 1 ~/projects/tmp/index_dump.json > ~/projects/tmp/random_record.json && cat ~/projects/tmp/random_record.json
+	./ops/local/test-fixtures-path ~/projects/tmp/random_record.json
+done

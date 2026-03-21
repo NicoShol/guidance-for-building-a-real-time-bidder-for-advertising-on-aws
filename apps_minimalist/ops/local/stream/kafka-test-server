@@ -1,0 +1,38 @@
+#!/usr/bin/env bash 
+
+. ./ops/local/test-env
+
+# Checking $SERVER_URL set. If not, raise 
+if [ -z "$SERVER_URL" ]; then
+    echo "SERVER_URL is not set. Please set it in the test environment."
+    exit 1
+fi
+
+# Check if there already is a running Kafka container and stop it
+if [ "$(docker ps -q -f name=kafka)" ]; then
+    echo "Stopping existing Kafka container..."
+    docker stop kafka
+    docker rm kafka
+fi
+
+docker run -d \
+  --name kafka \
+  -p 9092:9092 \
+  -e KAFKA_NODE_ID=1 \
+  -e KAFKA_PROCESS_ROLES=broker,controller \
+  -e KAFKA_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 \
+  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://$SERVER_URL:9092 \
+  -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER \
+  -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@localhost:9093 \
+  apache/kafka:4.2.0
+
+# Topic creation 
+docker exec kafka /opt/kafka/bin/kafka-topics.sh --create --topic bidder-events --bootstrap-server localhost:9092 --partitions 3 --replication-factor 1
+
+# NB: Data will be lost when the container is stopped, this is only for testing purposes. For a more persistent setup, consider using Docker volumes or a managed Kafka service.
+# For persistent storage, you can add a volume to the docker run command:
+# -v /path/to/local/data:/var/lib/kafka/data \
+# OR in a docker-compose, add a volume mount. 
+
+# Checking number of messages per partitions
+# docker exec kafka /opt/kafka/bin/kafka-get-offsets.sh --bootstrap-server localhost:9092 --topic bidder-events

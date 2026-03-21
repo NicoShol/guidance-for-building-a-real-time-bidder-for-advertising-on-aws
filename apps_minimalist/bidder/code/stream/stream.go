@@ -33,7 +33,11 @@ func New(cfg Config) Stream {
 	}
 }
 
-func (s *kafkaStream) PutRequest(data []byte)  { s.producer.put(data) }
+func (s *kafkaStream) PutRequest(data []byte)  {
+	// log.Info().Msg("Putting request to stream")
+	s.producer.put(data)
+	// log.Info().Msg("Request put to stream")
+}
 func (s *kafkaStream) PutResponse(data []byte) { s.producer.put(data) }
 func (s *kafkaStream) Close() error            { return s.producer.close() }
 

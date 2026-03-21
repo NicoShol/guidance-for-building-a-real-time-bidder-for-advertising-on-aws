@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export SERVER_ADDRESS=localhost:8000
+export SERVER_URL=localhost
+export SERVER_ADDRESS=$SERVER_URL:8000
 export SERVER_BIDREQUEST_PATH=/bidrequest
 export SERVER_BIDREQUEST_URL="http://$SERVER_ADDRESS$SERVER_BIDREQUEST_PATH"
 export BIDREQUEST_TIMEOUT=100ms

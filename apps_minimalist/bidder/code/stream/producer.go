@@ -21,7 +21,8 @@ func newProducer(cfg Config) *producer {
 		Balancer:     &kafka.LeastBytes{},
 		BatchSize:    cfg.BatchSize,
 		BatchTimeout: cfg.BatchTimeout,
-		Async:        true,
+		//Async:        false,  // DEBUG, set to true for better performance but more complex error handling (so debugging --> false for now)
+		Async:        true,  // DEBUG, set to true for better performance but more complex error handling (so debugging --> false for now)
 		Compression:  kafka.Snappy,
 		ErrorLogger:  kafka.LoggerFunc(func(msg string, args ...interface{}) {
 			log.Error().Msgf(msg, args...)
@@ -56,7 +57,6 @@ func (p *producer) put(data []byte) {
 // kafka.Writer handles batching internally (BatchSize / BatchTimeout).
 func (p *producer) drain() {
 	defer p.wg.Done()
-
 	for data := range p.inputChan {
 		if err := p.writer.WriteMessages(context.Background(), kafka.Message{Value: data}); err != nil {
 			log.Error().Err(err).Msg("kafka write failed")

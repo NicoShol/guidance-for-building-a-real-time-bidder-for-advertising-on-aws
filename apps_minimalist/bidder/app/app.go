@@ -5,6 +5,7 @@ import (
 	"apps_minimalist/bidder/code/bidhandler"
 	diagnosticServer "apps_minimalist/bidder/code/diagnostic_server"
 	bidserver "apps_minimalist/bidder/code/server"
+	"apps_minimalist/bidder/code/stream"
 	"os"
 	"os/signal"
 	"runtime"
@@ -38,7 +39,8 @@ func App() (errReturn error) {
 	)
 
 	auctionFn := auction.New()
-	bidHandler := bidhandler.New(cfg.BidHandlerCfg, auctionFn)
+	dataStream := stream.New(cfg.Stream)
+	bidHandler := bidhandler.New(cfg.BidHandlerCfg, auctionFn, dataStream)
 	server := bidserver.NewServer(cfg.Server, bidHandler)
 	diagServer := diagnosticServer.New(cfg.DiagnosticServer)
 

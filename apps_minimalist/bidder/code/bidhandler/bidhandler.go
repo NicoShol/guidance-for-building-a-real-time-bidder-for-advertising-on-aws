@@ -2,6 +2,8 @@ package bidhandler
 
 import (
 	"apps_minimalist/bidder/code/auction"
+	"apps_minimalist/bidder/code/stream"
+
 	"time"
 
 	"github.com/rs/zerolog/log"
@@ -9,21 +11,25 @@ import (
 )
 
 type Handler struct {
-	cfg        *Config
-	auction    *auction.Auction
+	cfg       	*Config
+	auction   	*auction.Auction
 	pool 		*pool
+	stream     	stream.Stream
 }
 
 func New(
 	cfg Config,
 	auctionFn *auction.Auction,
+	dataStream stream.Stream,
 ) Handler {
 	return Handler{
 		cfg: &cfg,
 		auction: auctionFn,
 		pool: &pool{},
+		stream: dataStream,
 	}
 }
+
 
 func (h Handler) HandleRequest(ctx *fasthttp.RequestCtx) {
 		log.Info().Msg("Recieved request")
@@ -33,10 +39,10 @@ func (h Handler) HandleRequest(ctx *fasthttp.RequestCtx) {
 		pd := h.pool.Get()
 		defer h.pool.Put(pd)
 
-		// byteRequest, request := h.readRequest(ctx, pd)  // byteRequest will be snet to datastream ? 
-		_, request := h.readRequest(ctx, pd)
-		if request == nil {
-			return
+		byteRequest, request := h.readRequest(ctx, pd)
+		if request == nil { return }
+		if h.stream != nil {
+			h.stream.PutRequest(byteRequest)
 		}
 
 		response := auction.Response{}
@@ -49,5 +55,8 @@ func (h Handler) HandleRequest(ctx *fasthttp.RequestCtx) {
 		}
 
 		bidResponse := buildResponse(&response, pd)
+		if h.stream != nil {
+			h.stream.PutResponse(bidResponse)
+		}
 		h.writeResponse(bidResponse, ctx)
 	}

@@ -6,6 +6,13 @@ set -e
 
 . ./ops/local/test-env
 
+while getopts "s" opt; do
+    case $opt in
+        s) echo "Loading stream environment..."
+           . ./ops/local/stream/test-env-stream ;;
+    esac
+done
+
 echo "Building server..."
 go build -o ./main .
 

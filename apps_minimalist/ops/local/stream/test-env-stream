@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export KAFKA_DISABLE=false
+export KAFKA_BROKERS="localhost:9092"
+export KAFKA_TOPIC="bidder-events"
+export KAFKA_BATCH_SIZE=1000
+export KAFKA_BATCH_TIMEOUT=500ms
+export KAFKA_BUFFER_SIZE=100000

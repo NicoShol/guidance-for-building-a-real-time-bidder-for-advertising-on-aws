@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; font-family: Arial, sans-serif; }
+  .banner {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+  }
+  .logo { font-size: 28px; font-weight: bold; margin-bottom: 12px; }
+  .tagline { font-size: 14px; color: #aaa; margin-bottom: 20px; }
+  .cta {
+    padding: 10px 28px;
+    background: #e94560;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+  <div class="banner" onclick="window.open('https://example.com','_blank')">
+    <div class="logo">Test Campaign</div>
+    <div class="tagline">This is a test creative (300x250)</div>
+    <span class="cta">Learn More</span>
+  </div>
+</body>
+</html>

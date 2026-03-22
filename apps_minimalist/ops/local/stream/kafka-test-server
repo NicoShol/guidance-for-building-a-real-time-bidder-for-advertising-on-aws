@@ -36,3 +36,7 @@ docker exec kafka /opt/kafka/bin/kafka-topics.sh --create --topic bidder-events 
 
 # Checking number of messages per partitions
 # docker exec kafka /opt/kafka/bin/kafka-get-offsets.sh --bootstrap-server localhost:9092 --topic bidder-events
+
+# Check messages in topic (for testing, should be empty at start)
+# docker exec kafka /opt/kafka/bin/kafka-dump-log.sh --files /tmp/kafka-logs/bidder-events-0/00000000000000000000.log --print-data-log > apps_minimalist/logs/kafka_bidder_event_0.log
+# TODO: this could be done by a client ? 
